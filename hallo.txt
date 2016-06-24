@@ -1,2 +1,6 @@
 Hello, world
+<<<<<<< HEAD
 Hi I was changed in master
+=======
+Hi
+>>>>>>> my-branch

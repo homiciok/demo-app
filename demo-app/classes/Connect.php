@@ -88,12 +88,18 @@ class Connect {
 		$iemail = (isset($_POST['email']) ? $_POST['email'] : null);
 		$query = "SELECT `email` FROM users WHERE `email` = '$iemail';";
 	    $result = $this-> mysqli->query($query); 
-
 	    if(isset($_POST)){
 	    	if(mysqli_num_rows($result) > 0) {
-	            echo "email exists"; 
+	           
+	            while($row = mysqli_fetch_assoc($result)) {
+		       		$dbemail = $row['email'];
+	        	}
+		   			if($iemail==$dbemail){
+		   				return false;	
+					}
+
 	   		}else{
-	    		echo "you can add a new account";
+	    		return true;
 	    	}
 		}
 	}

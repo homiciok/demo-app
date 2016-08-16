@@ -24,19 +24,24 @@
 	$obj = Connect::getInstance();
 	$errors = $validator->getErrors();
 	
-	$result = $obj->userExists();
-	if(!empty($errors)){
-		print_r("No text set yet.");
-	}else{
+	
 
-		if($dataArr['password'] === $confirm_password){
-		$result = $obj->insert($dataArr);
-		header('Location: ' . $_SERVER['PHP_SELF']);
-		exit;
+		if(!empty($errors)){
+			print_r("No text set yet.");
 		}else{
-				echo "passwords does not match";
+
+			if($dataArr['password'] === $confirm_password){
+				$result = $obj->userExists();
+				if($result === true){
+					$result = $obj->insert($dataArr);
+					header('Location: ' . $_SERVER['PHP_SELF']);
+					exit;
+				}
+			
+			}else{
+					echo "passwords does not match";
+			}
 		}
-	}
 	}	
 ?>
 <!DOCTYPE  html>

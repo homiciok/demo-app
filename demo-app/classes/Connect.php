@@ -12,6 +12,7 @@ class Connect {
 	private $query;
 	private $connection;
 	public static $instance;
+
 	
 	public static function getInstance(){
 		if(!isset(self::$instance)){
@@ -45,7 +46,7 @@ class Connect {
 		}
 		$query = substr($query, 0, -2);
 		$query .= ") VALUES (";
-
+		//$dataArr['password']= md5($dataArr['password']); 
 		foreach ($dataArr as $key => $value) {
 		 	$query .= "'$value', ";
 		}
@@ -57,13 +58,9 @@ class Connect {
 		
 	//for the log in form
 	
-	public function selectUser(){
+	public function selectUser($email, $password){
  		
-
- 		$iemail = (isset($_POST['email']) ? $_POST['email'] : null);
-    	$ipassword = (isset($_POST['password']) ? $_POST['password'] : null);
-
-		$query = "SELECT `email`, `password` FROM users WHERE `email`='$iemail' and `password`='$ipassword';";
+		$query = "SELECT * FROM users WHERE `email` = '".$this->mysqli->real_escape_string($email)."' and `password` = '".md5($this->mysqli->real_escape_string($password))."' ;";
 		$result = $this-> mysqli->query($query);	
 		$num_rows = mysqli_num_rows($result);
 
@@ -73,35 +70,26 @@ class Connect {
 		       		$dbemail    = $row['email'];
 		       		$dbpassword = $row['password'];
 	        	}
-		   			if($iemail==$dbemail && $ipassword == $dbpassword){
-		   				$_SESSION['email'] = $iemail;
+		   			if($this->mysqli->real_escape_string($email)== $dbemail && md5($this->mysqli->real_escape_string($password)) == $dbpassword){
+		   				$_SESSION['email'] = $this->mysqli->real_escape_string($email);
+		   				$_SESSION['user'] = $row;
 		   				header('Location: /demo-app/profile.php');		
 					}
     		}else{
 		    	echo 'unavailable account';
-		    	}
+		    }
 		}	
 	}
 
-	public function userExists(){
+	public function emailExists($email){
 		
-		$iemail = (isset($_POST['email']) ? $_POST['email'] : null);
-		$query = "SELECT `email` FROM users WHERE `email` = '$iemail';";
-	    $result = $this-> mysqli->query($query); 
-	    if(isset($_POST)){
-	    	if(mysqli_num_rows($result) > 0) {
-	           
-	            while($row = mysqli_fetch_assoc($result)) {
-		       		$dbemail = $row['email'];
-	        	}
-		   			if($iemail==$dbemail){
-		   				return false;	
-					}
+		$query = "SELECT `email` FROM users WHERE `email` = '".$this->mysqli->real_escape_string($email)."' LIMIT 1;";
 
-	   		}else{
-	    		return true;
-	    	}
-		}
+	    if (($result = $this-> mysqli->query($query)) && $result->num_rows > 0) {
+	    	return true;
+	    }
+	    return false;
+	    
 	}
 		
 	public function __destruct() {

@@ -12,7 +12,7 @@
 	'password'=> 'validRegexPassword'
 	];
 
-	$confirm_password = $_POST['confirm_password'];
+	
 	
 	foreach ($form_validation as $key => $rule) {
 			$dataArr[$key] = empty($_POST[$key]) ? '' : trim($_POST[$key]);
@@ -23,25 +23,29 @@
 
 	$obj = Connect::getInstance();
 	$errors = $validator->getErrors();
-	
-	
 
-		if(!empty($errors)){
-			print_r("No text set yet.");
-		}else{
+	$confirm_password = md5($_POST['confirm_password']);
+	$dataArr['password'] = md5($dataArr['password']);
+	//print_r($dataArr['password']);
+
+		if(empty($errors)){
 
 			if($dataArr['password'] === $confirm_password){
-				$result = $obj->userExists();
-				if($result === true){
+				if(!$obj->emailExists($dataArr['email'])){
+
+					//$user = $dataArr;
 					$result = $obj->insert($dataArr);
 					header('Location: ' . $_SERVER['PHP_SELF']);
 					exit;
 				}
+				$errors['email'] = "There is another account with this email";
 			
 			}else{
-					echo "passwords does not match";
+					$errors['confirm_password'] = "passwords does not match";
 			}
 		}
+
+
 	}	
 ?>
 <!DOCTYPE  html>
@@ -61,17 +65,17 @@
 	  	      			<? if (!empty($errors['name'])) { ?>
 	           			<span class="error"> * <?= $errors['name'] ?></span>
 	  	      			<? } ?>
-						<input id="name" name="name" placeholder="nume" type="text">
+						<input id="name" name="name" placeholder="nume" type="text" value="<?= @$dataArr['name'] ?>">
 					<label for="surname" class="text">Prenume:</label>
            				<? if (!empty($errors['surname'])) { ?>
 	           			<span class="error"> * <?= $errors['surname'] ?></span>
 	  	      			<? } ?>
-						<input id="surname" name="surname" placeholder="prenume" type="text"> 
+						<input id="surname" name="surname" placeholder="prenume" type="text" value="<?= @$dataArr['surname'] ?>"> 
 					<label for="email" class="text">Email: </label>
            				<? if (!empty($errors['email'])) { ?>
 	           			<span class="error"> * <?= $errors['email'] ?></span>
 	  	      			<? } ?>
-						<input id="email" name="email" placeholder="email" type="text">
+						<input id="email" name="email" placeholder="email" type="text" value="<?= @$dataArr['email'] ?>">
 					<label for="password" class="text">Parola: </label>
            				<? if (!empty($errors['password'])) { ?>
 	           			<span class="error"> * <?= $errors['password'] ?></span>

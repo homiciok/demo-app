@@ -1,8 +1,35 @@
 <?php
 
-  $obj = Connect::getInstance();
-  $result = $obj->selectUser();
 
+
+
+  if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+  $validator = new Validator();
+  $dataArr = [];
+
+  $form_validation = [
+  'name'    => 'validRegexName', 
+  'surname' => 'validRegexName', 
+  'email'   => 'validRegexEmail', 
+  'password'=> 'validRegexPassword'
+  ];
+
+  foreach ($form_validation as $key => $rule) {
+      $dataArr[$key] = empty($_POST[$key]) ? '' : trim($_POST[$key]);
+      if ($validator->isNotEmpty($dataArr[$key],$key)) {
+        $validator->$rule($dataArr[$key],$key);
+      } 
+  }
+
+  $obj = Connect::getInstance();
+  $errors = $validator->getErrors();
+  
+  
+
+  $obj = Connect::getInstance();
+  $result = $obj->selectUser($dataArr['email'], $dataArr['password']);
+}
 
 ?>
 

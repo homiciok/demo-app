@@ -1,6 +1,7 @@
 body{
 	background-color: #ecf0f1;
 }
+
 .iFloat{
 	padding:8px;
     float: left;
@@ -22,6 +23,8 @@ p{
 	text-align: center;
 	font-family: 'Poiret One', cursive;
 }
+
+
 
 div.image img{	
 	height: auto;
@@ -49,3 +52,5 @@ div.image img{
     content: "";
     display: inline;
     clear: both;
+}
+

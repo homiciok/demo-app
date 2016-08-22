@@ -41,31 +41,9 @@ class Validator{
       return true;
   }
 
-
   public function getErrors(){
       return $this->errors;
   }
-/*
-  public function verify(){
-    
-    $dataArr = [];
-    $validator = new Validator();
-    $form_validation = [
-    'name'    => 'validRegexName', 
-    'surname' => 'validRegexName', 
-    'email'   => 'validRegexEmail', 
-    'password'=> 'validRegexPassword'
-    ];
-
-      foreach ($form_validation as $key => $rule) {
-        $input[$key] = empty($_POST[$key]) ? '' : trim($_POST[$key]);
-        if ($validator->isNotEmpty($input[$key],$key)) {
-          $validator->$rule($input[$key],$key);
-        } 
-    }
-
-  }
-  */
 
 }
 

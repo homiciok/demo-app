@@ -17,14 +17,13 @@
  		$this->email = $email;
  		$this->password = $password;
 
- 		}
+  }
  	
  	public function getUser(){
  		
  	}
 
  	public function login(){
-
 		
 	}
 
@@ -40,8 +39,6 @@
 	}
 
 }
- 
-
 
 
 ?>

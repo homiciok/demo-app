@@ -1,38 +1,29 @@
 <?php
 
-
-
-
   if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-  $validator = new Validator();
-  $dataArr = [];
+    $validator = new Validator();
+    $dataArr = [];
 
-  $form_validation = [
-  'name'    => 'validRegexName', 
-  'surname' => 'validRegexName', 
-  'email'   => 'validRegexEmail', 
-  'password'=> 'validRegexPassword'
-  ];
+    $form_validation = [
+    'name'    => 'validRegexName', 
+    'surname' => 'validRegexName', 
+    'email'   => 'validRegexEmail', 
+    'password'=> 'validRegexPassword'
+    ];
 
-  foreach ($form_validation as $key => $rule) {
-      $dataArr[$key] = empty($_POST[$key]) ? '' : trim($_POST[$key]);
-      if ($validator->isNotEmpty($dataArr[$key],$key)) {
-        $validator->$rule($dataArr[$key],$key);
-      } 
-  }
+    foreach ($form_validation as $key => $rule) {
+        $dataArr[$key] = empty($_POST[$key]) ? '' : trim($_POST[$key]);
+        if ($validator->isNotEmpty($dataArr[$key],$key)) {
+          $validator->$rule($dataArr[$key],$key);
+        } 
+    }
 
-  $obj = Connect::getInstance();
-  $errors = $validator->getErrors();
-  
-  
-
-  $obj = Connect::getInstance();
-  $result = $obj->selectUser($dataArr['email'], $dataArr['password']);
+    $obj = Connect::getInstance();
+    $errors = $validator->getErrors();
+    $result = $obj->selectUser($dataArr['email'], $dataArr['password']);
 }
-
 ?>
-
 <!DOCTYPE  html>
 <html>
     <head>
@@ -46,11 +37,11 @@
         	<div id ="login"> 
   	      		<h2 class="text">Login</h2>
   	      		<form action = "<?php $_SERVER["PHP_SELF"];?>" method="post">
-					<label for="email" class="text">Email: </label>
-						<input id="email" name="email" placeholder="email" type="text">
-					<label for="password" class="text">Parola: </label>
-						<input id="password" name="password" placeholder="password" type="password">
-						<input name="submit2" type="submit" value=" Login ">
+      					<label for="email" class="text">Email: </label>
+      						<input id="email" name="email" placeholder="email" type="text">
+      					<label for="password" class="text">Parola: </label>
+      						<input id="password" name="password" placeholder="password" type="password">
+      						<input name="submit2" type="submit" value=" Login ">
   	      		</form>
         	</div>
         </div>

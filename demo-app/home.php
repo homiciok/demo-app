@@ -1,12 +1,13 @@
 <?php
-
+			
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
+
 	<title>Welcome</title>
-	<link rel="stylesheet" href="public/css/main.css">
+	<link rel="stylesheet" href="/photo-gallery/css/main.css">
 	 <link href='https://fonts.googleapis.com/css?family=Poiret+One' rel='stylesheet' type='text/css'>
 </head>
 <body>

@@ -1,5 +1,4 @@
 <?php
-	
 	class Redirect{
 		
 		public static function toPage($location = null){

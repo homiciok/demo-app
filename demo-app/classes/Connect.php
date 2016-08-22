@@ -5,14 +5,12 @@ require 'config/config.php';
 * Singleton class for connect.php
 */
 
-
 class Connect {
 
-	private $mysqli;
+	public $mysqli;
 	private $query;
 	private $connection;
 	public static $instance;
-
 	
 	public static function getInstance(){
 		if(!isset(self::$instance)){
@@ -25,37 +23,38 @@ class Connect {
 		$this->mysqli = new mysqli(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_DATABASE);
 		if (mysqli_connect_errno()){
 			echo "Failed to connect to MySQL: " . mysqli_connect_error();
-		  }
+		}
 	}
 
 	protected function __clone(){
 
 	}
 
-	public function getConnection() {
+	public static function getConnection() {
 		return $this->connection;
 	}
 
 	//for the sign up form
 
-	public function insert($dataArr) {
+	public function insert($dataArr, $table) {
 		
-		$query = "INSERT INTO users (";
+		$query = "INSERT INTO ".$table. "(";
 		foreach ($dataArr as $key => $value) {
 			$query .= "`$key`, ";
 		}
+
 		$query = substr($query, 0, -2);
 		$query .= ") VALUES (";
-		//$dataArr['password']= md5($dataArr['password']); 
 		foreach ($dataArr as $key => $value) {
 		 	$query .= "'$value', ";
 		}
+
 		$query = substr($query, 0, -2);
 		$query .= ")";
 		$result = $this->mysqli->query($query);
 		return $result;
 	}
-		
+	
 	//for the log in form
 	
 	public function selectUser($email, $password){
@@ -69,15 +68,15 @@ class Connect {
 				while($row = mysqli_fetch_assoc($result)) {
 		       		$dbemail    = $row['email'];
 		       		$dbpassword = $row['password'];
-	        	}
-		   			if($this->mysqli->real_escape_string($email)== $dbemail && md5($this->mysqli->real_escape_string($password)) == $dbpassword){
+	      }
+		   	if($this->mysqli->real_escape_string($email)== $dbemail && md5($this->mysqli->real_escape_string($password)) == $dbpassword){
 		   				$_SESSION['email'] = $this->mysqli->real_escape_string($email);
 		   				$_SESSION['user'] = $row;
 		   				header('Location: /demo-app/profile.php');		
-					}
-    		}else{
+			  }
+    	}else{
 		    	echo 'unavailable account';
-		    }
+		  }
 		}	
 	}
 
@@ -89,7 +88,6 @@ class Connect {
 	    	return true;
 	    }
 	    return false;
-	    
 	}
 		
 	public function __destruct() {

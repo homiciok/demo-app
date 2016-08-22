@@ -17,6 +17,6 @@ class Sessions {
 				unset($_SESSION[$name]);
 			}
 		}
-	}
+}
 
 ?>

@@ -11,8 +11,6 @@
 	'email'   => 'validRegexEmail', 
 	'password'=> 'validRegexPassword'
 	];
-
-	
 	
 	foreach ($form_validation as $key => $rule) {
 			$dataArr[$key] = empty($_POST[$key]) ? '' : trim($_POST[$key]);
@@ -23,10 +21,8 @@
 
 	$obj = Connect::getInstance();
 	$errors = $validator->getErrors();
-
 	$confirm_password = md5($_POST['confirm_password']);
 	$dataArr['password'] = md5($dataArr['password']);
-	//print_r($dataArr['password']);
 
 		if(empty($errors)){
 
@@ -34,7 +30,7 @@
 				if(!$obj->emailExists($dataArr['email'])){
 
 					//$user = $dataArr;
-					$result = $obj->insert($dataArr);
+					$result = $obj->insert($dataArr, 'users');
 					header('Location: ' . $_SERVER['PHP_SELF']);
 					exit;
 				}
@@ -59,37 +55,41 @@
     <body>
         <div id = "main">
         	<div id ="login"> 
-  	      		<h2 class="text">Sign up</h2>
+  	      		<h2 class="text">Register</h2>
   	      		<form action = "<?php $_SERVER['PHP_SELF'] ?>" method="post">
+  	      			
   	      			<label for="name" class="text"> Nume:</label>
 	  	      			<? if (!empty($errors['name'])) { ?>
 	           			<span class="error"> * <?= $errors['name'] ?></span>
 	  	      			<? } ?>
-						<input id="name" name="name" placeholder="nume" type="text" value="<?= @$dataArr['name'] ?>">
-					<label for="surname" class="text">Prenume:</label>
+									<input id="name" name="name" placeholder="name" type="text" value="<?= @$dataArr['name'] ?>">
+								
+								<label for="surname" class="text">Prenume:</label>
            				<? if (!empty($errors['surname'])) { ?>
 	           			<span class="error"> * <?= $errors['surname'] ?></span>
 	  	      			<? } ?>
-						<input id="surname" name="surname" placeholder="prenume" type="text" value="<?= @$dataArr['surname'] ?>"> 
-					<label for="email" class="text">Email: </label>
+									<input id="surname" name="surname" placeholder="surname" type="text" value="<?= @$dataArr['surname'] ?>"> 
+								
+								<label for="email" class="text">Email: </label>
            				<? if (!empty($errors['email'])) { ?>
 	           			<span class="error"> * <?= $errors['email'] ?></span>
 	  	      			<? } ?>
-						<input id="email" name="email" placeholder="email" type="text" value="<?= @$dataArr['email'] ?>">
-					<label for="password" class="text">Parola: </label>
+									<input id="email" name="email" placeholder="email" type="text" value="<?= @$dataArr['email'] ?>">
+								
+								<label for="password" class="text">Parola: </label>
            				<? if (!empty($errors['password'])) { ?>
 	           			<span class="error"> * <?= $errors['password'] ?></span>
 	  	      			<? } ?>
 	  	      			<input id="password" name="password" placeholder="password" type="password">      
 	  	      	    
-	  	      	    <label for="confirm_password" class="text">Confirma parola: </label>
-						<? if (!empty($errors['confirm_password'])) { ?>
-						<span class="error"> * <?= $errors['confirm_password'] ?></span>
-						<? } ?>
-						<input id="confirm_password" name="confirm_password" placeholder="password" type="password"> 
-					    
-					    <input name="submit" type="submit" value=" Sign Up ">
-                		<input type="button" name="log"  onclick="window.location ='login.php';" value= "Login">
+	  	      	  <label for="confirm_password" class="text">Confirma parola: </label>
+									<? if (!empty($errors['confirm_password'])) { ?>
+									<span class="error"> * <?= $errors['confirm_password'] ?></span>
+									<? } ?>
+									<input id="confirm_password" name="confirm_password" placeholder="password" type="password"> 
+								    
+							    <input name="submit" type="submit" value=" Register ">
+              		<input type="button" name="log"  onclick="window.location ='login.php';" value= "Login">
   	      		</form>
         	</div>
         </div>

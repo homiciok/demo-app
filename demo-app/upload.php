@@ -1,46 +1,51 @@
 <?php
-  
+
+
+/*
+
+
+$obj = Connect::getInstance();
+$user_id = $_SESSION['id'];
+if($_SESSION['email']) {
+  $uploaded = $obj->uploadImages(); 
+}
+
+*/
+
+
   $img = isset($_FILES['userfile']) ? $_FILES['userfile'] : '';
-  $imageId = isset($_GET['id']) ? $_GET['id'] : '';
-  $obj = Connect::getInstance();
-
-
+  
     if(!empty($img))
     {
-      $uploaded = uploadImages(); 
-
+      $uploaded =uploadImages(); 
+    
     }
-
-    if (empty($_GET['id']) || !is_numeric($_GET['id'])) {
-      $query = "SELECT * FROM `images` WHERE `id` = '$imageId' AND `name` = '$newname';";
-      $result = $obj->mysqli->query($query);
-      
-      header('Content-type:image/jpg');
-
-    }
-
 
   function uploadImages(){
 
+      $img = isset($_FILES['userfile']) ? $_FILES['userfile'] : '';
       $obj = Connect::getInstance();
       $img = $_FILES['userfile'];
       $img_desc = reorderArray($img);
-
-
 
         foreach($img_desc as $value)
         {   
             $newname = date('Y-m-d H:i:s_',time()).mt_rand().'.jpg';
             $moved = move_uploaded_file($value['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . "/demo-app-2/images/" . $newname); 
-            $query = "INSERT INTO `images` (`name`) VALUES ('.$newname')";
+            $path = "demo-app-2/images/";
+            $query = "INSERT INTO `images` (`name`, `path`, `user_id`) VALUES ('$newname', '$path', '".$_SESSION['id']."');";
             $result = $obj->mysqli->query($query);
+
         }
+
         if($result){
           echo "Successful upload";
+
         }else{
           echo "Unsuccessful upload";
         }   
   }
+
 
   function reorderArray($image)
   {
@@ -84,8 +89,7 @@
           </form>
          
       </div>
-    </div>
+    </div>   
 
-     <img src="upload.php?id= <?= $imageId ?>" width="150px">
 </body>
 </html>
